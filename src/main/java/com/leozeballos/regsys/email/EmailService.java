@@ -23,15 +23,17 @@ public class EmailService implements EmailSender {
     @Async
     public void send(String to, String email) {
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(email, true);
             helper.setTo(to);
             helper.setSubject("Confirm your email");
-            helper.setFrom("registration@regsystem.com");
+            helper.setFrom("hello@regsystem.com");
+            mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             LOGGER.error("Failed to send email", e);
             throw new IllegalStateException("Failed to send email");
         }
     }
+
 }

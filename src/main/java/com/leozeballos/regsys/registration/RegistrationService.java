@@ -22,10 +22,11 @@ public class RegistrationService {
     private final EmailSender emailSender;
 
     public String register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.test(request.getEmail());
-        if (!isValidEmail) {
+
+        if (!emailValidator.test(request.getEmail())) {
             throw new IllegalStateException("email not valid");
         }
+
         String token = appUserService.signUpUser(
                 new AppUser(
                         request.getFirstName(),
@@ -36,7 +37,7 @@ public class RegistrationService {
                 )
         );
 
-        String link = "http://localhost:8080/registration/confirm?token=" + token;
+        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
         emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
 
         return token;
